@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Reporting.Application.DTOs;
 using Reporting.Infrastructure.Db;
@@ -25,22 +26,66 @@ public sealed class TasksPerUserReportRepository
         if(!string.IsNullOrWhiteSpace(status))
             tasks = tasks.Where(t => t.Status == status);
 
-        if (to.HasValue)
+        if (from.HasValue)
             tasks = tasks.Where(t => t.CreatedAt >= from.Value);
 
-        if (from.HasValue)
+        if (to.HasValue)
             tasks = tasks.Where(t => t.CreatedAt <= to.Value);
 
         return await tasks
-            .GroupBy(t => t.UserId)
+            .GroupBy(t => new { t.UserId, t.User.Name })
             .Select(g => new TasksPerUserReportDto
             {
-                UserId = g.Key,
-                UserName = g.Select(x => x.User.Name).FirstOrDefault(),
+                UserId = ()g.Key.UserId,
+                UserName = g.Key.Name,
                 TasksCount = g.Count()
             })
             .OrderByDescending(x => x.TasksCount)
             .ToListAsync();
 
     }
+
+    public async Task<List<TasksPerUserReportDto>> GetTaskPerUser_RawSqlAsync(
+    string? status = null,
+    DateTime? from = null,
+    DateTime? to = null)
+    {
+        var sql = @"
+        SELECT 
+            u.Id AS UserId,
+            u.Name AS UserName,
+            COUNT(t.Id) AS TasksCount
+        FROM Tasks t
+        JOIN Users u ON t.UserId = u.Id
+        WHERE 1 = 1
+    ";
+
+        var parameters = new List<SqlParameter>();
+
+        if (!string.IsNullOrWhiteSpace(status))
+        {
+            sql += " AND t.Status = @status";
+            parameters.Add(new SqlParameter("@status", status));
+        }
+
+        if (from.HasValue)
+        {
+            sql += " AND t.CreatedAt >= @from";
+            parameters.Add(new SqlParameter("@from", from.Value));
+        }
+
+        if (to.HasValue)
+        {
+            sql += " AND t.CreatedAt <= @to";
+            parameters.Add(new SqlParameter("@to", to.Value));
+        }
+
+        sql += " GROUP BY u.Id, u.Name ORDER BY TasksCount DESC";
+
+        return await _context.Set<TasksPerUserReportDto>()
+            .FromSqlRaw(sql, parameters.ToArray())
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
 }
