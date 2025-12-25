@@ -36,7 +36,7 @@ public sealed class TasksPerUserReportRepository
             .GroupBy(t => new { t.UserId, t.User.Name })
             .Select(g => new TasksPerUserReportDto
             {
-                UserId = ()g.Key.UserId,
+                UserId = g.Key.UserId,
                 UserName = g.Key.Name,
                 TasksCount = g.Count()
             })
