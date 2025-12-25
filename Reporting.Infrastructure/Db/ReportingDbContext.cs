@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Reporting.Application.DTOs;
 using Reporting.Domain.Entities;
 
 namespace Reporting.Infrastructure.Db;
@@ -36,7 +37,7 @@ public sealed class ReportingDbContext : DbContext
         modelBuilder.Entity<Project>()
                 .HasKey(p => p.Id);
 
-         // Task
+        // Task
         modelBuilder.Entity<TaskEntity>()
                 .HasKey(t => t.Id);
 
@@ -73,5 +74,13 @@ public sealed class ReportingDbContext : DbContext
 
         modelBuilder.Entity<TaskEntity>()
             .HasIndex(t => t.CompletedAt);
+
+        // Reporting DTO
+        modelBuilder.Entity<TasksPerUserReportDto>(eb =>
+        {
+            eb.HasNoKey();
+            eb.ToView(null); // no db object
+        });
+
     }
 }
