@@ -381,6 +381,7 @@ appsettings.Local.json
 appsettings.*.json
 !appsettings.json
 
-# Entity Framework migrations (uncomment if you want to ignore migrations)
-# Migrations/
+# Entity Framework migrations
+**/Migrations/
+*.Designer.cs
 
