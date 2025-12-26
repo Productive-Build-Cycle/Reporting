@@ -76,7 +76,7 @@ public sealed class ReportingDbContext : DbContext
             .HasIndex(t => t.CompletedAt);
 
         // Reporting DTO
-        modelBuilder.Entity<TasksPerUserReportDto>(eb =>
+        modelBuilder.Entity<TasksPerUserRequestDto>(eb =>
         {
             eb.HasNoKey();
             eb.ToView(null); // no db object

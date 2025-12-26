@@ -15,9 +15,9 @@ public sealed class ReportsController : ControllerBase
     }
 
     [HttpGet("tasks-per-user")]
-    [ProducesResponseType(typeof(List<TasksPerUserReportDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<TasksPerUserRequestDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<List<TasksPerUserReportDto>>> GetTasksPerUserAsync(
+    public async Task<ActionResult<List<TasksPerUserRequestDto>>> GetTasksPerUserAsync(
     [FromQuery] bool useRawSql = false,
     [FromQuery] string? status = null,
     [FromQuery] DateTime? from = null,

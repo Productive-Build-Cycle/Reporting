@@ -14,7 +14,7 @@ public sealed class TasksPerUserReportRepository
         _context = context;
     }
 
-    public async Task<List<TasksPerUserReportDto>> GetTasksPerUser_LinqAsync(
+    public async Task<List<TasksPerUserRequestDto>> GetTasksPerUser_LinqAsync(
         string? status = null,
         DateTime? from = null,
         DateTime? to = null)
@@ -34,7 +34,7 @@ public sealed class TasksPerUserReportRepository
 
         return await tasks
             .GroupBy(t => new { t.UserId, t.User.Name })
-            .Select(g => new TasksPerUserReportDto
+            .Select(g => new TasksPerUserRequestDto
             {
                 UserId = g.Key.UserId,
                 UserName = g.Key.Name,
@@ -45,7 +45,7 @@ public sealed class TasksPerUserReportRepository
 
     }
 
-    public async Task<List<TasksPerUserReportDto>> GetTaskPerUser_RawSqlAsync(
+    public async Task<List<TasksPerUserRequestDto>> GetTaskPerUser_RawSqlAsync(
     string? status = null,
     DateTime? from = null,
     DateTime? to = null)
@@ -82,7 +82,7 @@ public sealed class TasksPerUserReportRepository
 
         sql += " GROUP BY u.Id, u.Name ORDER BY TasksCount DESC";
 
-        return await _context.Set<TasksPerUserReportDto>()
+        return await _context.Set<TasksPerUserRequestDto>()
             .FromSqlRaw(sql, parameters.ToArray())
             .AsNoTracking()
             .ToListAsync();

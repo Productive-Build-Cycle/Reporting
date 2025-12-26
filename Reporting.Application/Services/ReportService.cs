@@ -12,7 +12,7 @@ public class ReportService : IReportService
         _repository = repository;
     }
 
-    public async Task<List<TasksPerUserReportDto>> GetTasksPerUserAsync(
+    public async Task<List<TasksPerUserRequestDto>> GetTasksPerUserAsync(
         bool useRawSql = false,
         string? status = null,
         DateTime? from = null,
