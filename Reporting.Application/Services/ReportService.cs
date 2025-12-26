@@ -2,6 +2,7 @@ using Reporting.Application.DTOs;
 using Reporting.Application.Interfaces;
 
 namespace Reporting.Application.Services;
+
 public class ReportService : IReportService
 {
     private readonly ITasksPerUserReportRepository _repository;
@@ -11,7 +12,11 @@ public class ReportService : IReportService
         _repository = repository;
     }
 
-    public async Task<List<TasksPerUserReportDto>> GetTasksPerUserAsync(bool useRawSql = false, string? status = null, DateTime? from = null, DateTime? to = null)
+    public async Task<List<TasksPerUserReportDto>> GetTasksPerUserAsync(
+        bool useRawSql = false,
+        string? status = null,
+        DateTime? from = null,
+        DateTime? to = null)
     {
         if (useRawSql)
             return await _repository.GetTasksPerUser_RawSqlAsync(status, from, to);
