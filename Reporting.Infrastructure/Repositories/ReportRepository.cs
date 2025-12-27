@@ -87,7 +87,7 @@ public sealed class TasksPerUserReportRepository
             .ToListAsync();
     }
 
-    public async Task<List<CompletedTasksPerWeekReportDto>> GetTasksPerUserAsync(CompletedTasksPerWeekQuery query)
+    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(CompletedTasksPerWeekQuery query)
     {
         var sql = @"
             SELECT
@@ -119,5 +119,6 @@ public sealed class TasksPerUserReportRepository
             .FromSqlRaw(sql, parameters)
             .AsNoTracking()
             .ToListAsync();
+
     }
 }
