@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Reporting.Infrastructure.Db;
+using Reporting.Application.Interfaces;
+using Reporting.Application.Services;
+using Reporting.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// builder.Services.AddOpenApi();
 
 // Controllers
 builder.Services.AddControllers();
@@ -16,18 +15,22 @@ builder.Services.AddDbContext<ReportingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
+// Application Services
+builder.Services.AddScoped<
+    ITasksPerUserReportRepository,
+    TasksPerUserReportRepository>();
+
+builder.Services.AddScoped<IReportService, ReportService>();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    // app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
@@ -38,10 +41,8 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ReportingDbContext>();
-    db.Database.Migrate(); // Apply migrations before Seed
-    SeedData.Initialize(db); // Seed the database
+    db.Database.Migrate();
+    SeedData.Initialize(db);
 }
 
 app.Run();
-
-
