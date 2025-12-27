@@ -29,4 +29,16 @@ public class ReportsController : ControllerBase
 
         return Ok(result);
     }
+
+    /// <summary>
+    /// Returns weekly report of completed tasks.
+    /// </summary>
+    [HttpGet("completed-tasks-per-week")]
+    public async Task<IActionResult> GetCompletedTasksPerWeek([FromQuery] CompletedTasksPerWeekQuery query)
+    {
+        var result = await _reportService
+            .GetCompletedTasksPerWeekAsync(query);
+
+        return Ok(result);
+    }
 }
