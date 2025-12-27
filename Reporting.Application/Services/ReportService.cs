@@ -1,5 +1,6 @@
 using Reporting.Application.DTOs;
 using Reporting.Application.Interfaces;
+using System.Threading.Tasks;
 
 namespace Reporting.Application.Services;
 
@@ -26,6 +27,14 @@ public class ReportService : IReportService
                 query.Status, query.From, query.To)
             : await _repository.GetTasksPerUser_LinqAsync(
                 query.Status, query.From, query.To);
+    }
+
+    //Calls repository to get weekly completed tasks report
+    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
+            CompletedTasksPerWeekQuery query)
+    {
+        return await _repository
+            .GetCompletedTasksPerWeekAsync(query);
     }
 }
 
