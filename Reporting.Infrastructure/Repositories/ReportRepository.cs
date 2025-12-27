@@ -45,7 +45,7 @@ public sealed class TasksPerUserReportRepository
 
     }
 
-    public async Task<List<TasksPerUserRequestDto>> GetTaskPerUser_RawSqlAsync(
+    public async Task<List<TasksPerUserRequestDto>> GetTasksPerUser_RawSqlAsync(
     string? status = null,
     DateTime? from = null,
     DateTime? to = null)
