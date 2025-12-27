@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <!-- <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" /> -->
+    <PackageReference Include="EPPlus" Version="8.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
