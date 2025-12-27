@@ -4,12 +4,12 @@ namespace Reporting.Application.Interfaces;
 
 public interface ITasksPerUserReportRepository
 {
-    Task<List<TasksPerUserRequestDto>> GetTasksPerUser_LinqAsync(
+    Task<List<TasksPerUserReportDto>> GetTasksPerUser_LinqAsync(
         string? status = null,
         DateTime? from = null,
         DateTime? to = null);
 
-    Task<List<TasksPerUserRequestDto>> GetTasksPerUser_RawSqlAsync(
+    Task<List<TasksPerUserReportDto>> GetTasksPerUser_RawSqlAsync(
         string? status = null,
         DateTime? from = null,
         DateTime? to = null);

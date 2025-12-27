@@ -16,16 +16,14 @@ public sealed class TasksPerUserReportRepository
         _context = context;
     }
 
-    public async Task<List<TasksPerUserRequestDto>> GetTasksPerUser_LinqAsync(
+    public async Task<List<TasksPerUserReportDto>> GetTasksPerUser_LinqAsync(
         string? status = null,
         DateTime? from = null,
         DateTime? to = null)
     {
-        var tasks = _context.Tasks
-            .AsNoTracking()
-            .AsQueryable();
+        var tasks = _context.Tasks.AsNoTracking().AsQueryable();
 
-        if(!string.IsNullOrWhiteSpace(status))
+        if (!string.IsNullOrWhiteSpace(status))
             tasks = tasks.Where(t => t.Status == status);
 
         if (from.HasValue)
@@ -36,7 +34,7 @@ public sealed class TasksPerUserReportRepository
 
         return await tasks
             .GroupBy(t => new { t.UserId, t.User.Name })
-            .Select(g => new TasksPerUserRequestDto
+            .Select(g => new TasksPerUserReportDto
             {
                 UserId = g.Key.UserId,
                 UserName = g.Key.Name,
@@ -44,15 +42,14 @@ public sealed class TasksPerUserReportRepository
             })
             .OrderByDescending(x => x.TasksCount)
             .ToListAsync();
-
     }
 
-    public async Task<List<TasksPerUserRequestDto>> GetTasksPerUser_RawSqlAsync(
-    string? status = null,
-    DateTime? from = null,
-    DateTime? to = null)
+    public async Task<List<TasksPerUserReportDto>> GetTasksPerUser_RawSqlAsync(
+        string? status = null,
+        DateTime? from = null,
+        DateTime? to = null)
     {
-        var sql = @"
+        var sql = """
         SELECT 
             u.Id AS UserId,
             u.Name AS UserName,
@@ -60,7 +57,7 @@ public sealed class TasksPerUserReportRepository
         FROM Tasks t
         JOIN Users u ON t.UserId = u.Id
         WHERE 1 = 1
-    ";
+        """;
 
         var parameters = new List<SqlParameter>();
 
@@ -84,10 +81,9 @@ public sealed class TasksPerUserReportRepository
 
         sql += " GROUP BY u.Id, u.Name ORDER BY TasksCount DESC";
 
-        return await _context.Set<TasksPerUserRequestDto>()
+        return await _context.Set<TasksPerUserReportDto>()
             .FromSqlRaw(sql, parameters.ToArray())
             .AsNoTracking()
             .ToListAsync();
     }
-
 }

@@ -12,15 +12,20 @@ public class ReportService : IReportService
         _repository = repository;
     }
 
-    public async Task<List<TasksPerUserRequestDto>> GetTasksPerUserAsync(
-        bool useRawSql = false,
-        string? status = null,
-        DateTime? from = null,
-        DateTime? to = null)
+    public async Task<List<TasksPerUserReportDto>> GetTasksPerUserAsync(
+        TasksPerUserQuery query)
     {
-        if (useRawSql)
-            return await _repository.GetTasksPerUser_RawSqlAsync(status, from, to);
+        if (query.From.HasValue && query.To.HasValue &&
+            query.From > query.To)
+        {
+            throw new ArgumentException("From date cannot be greater than To date");
+        }
 
-        return await _repository.GetTasksPerUser_LinqAsync(status, from, to);
+        return query.UseRawSql
+            ? await _repository.GetTasksPerUser_RawSqlAsync(
+                query.Status, query.From, query.To)
+            : await _repository.GetTasksPerUser_LinqAsync(
+                query.Status, query.From, query.To);
     }
 }
+
