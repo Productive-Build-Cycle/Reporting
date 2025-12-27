@@ -1,11 +1,13 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Reporting.Application.DTOs;
+using Reporting.Application.Interfaces;
 using Reporting.Infrastructure.Db;
 
 namespace Reporting.Infrastructure.Repositories;
 
 public sealed class TasksPerUserReportRepository
+    : ITasksPerUserReportRepository
 {
     private readonly ReportingDbContext _context;
 
