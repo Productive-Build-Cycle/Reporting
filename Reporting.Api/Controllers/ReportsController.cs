@@ -29,4 +29,26 @@ public class ReportsController : ControllerBase
 
         return Ok(result);
     }
+
+    // Excel Export API 
+    [HttpGet("tasks-per-user/export")]
+    public async Task<IActionResult> ExportTasksPerUser(
+        [FromQuery] TasksPerUserQuery query,
+        [FromServices] ExcelExporter exporter)
+    {
+        var result = await _reportService.GetTasksPerUserAsync(query);
+
+        if (result.Count == 0)
+            return NoContent();
+
+        var file = exporter.ExportTasksPerUser(result);
+
+        return File(
+            file,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "tasks-per-user.xlsx"
+        );
+    }
+
+
 }
