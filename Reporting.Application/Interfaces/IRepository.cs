@@ -2,7 +2,7 @@ using Reporting.Application.DTOs;
 
 namespace Reporting.Application.Interfaces;
 
-public interface ITasksPerUserReportRepository
+public interface IReportRepository
 {
     Task<List<TasksPerUserReportDto>> GetTasksPerUser_LinqAsync(
         string? status = null,
@@ -15,5 +15,9 @@ public interface ITasksPerUserReportRepository
         DateTime? to = null);
 
     Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
-           CompletedTasksPerWeekQuery query);
+           CompletedTasksPerWeekQueryDto query);
+
+    Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
+        TeamPerformanceSummaryRequestDto request,
+        CancellationToken cancellationToken = default);           
 }
