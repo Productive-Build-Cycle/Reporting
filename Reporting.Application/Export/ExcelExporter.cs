@@ -43,9 +43,9 @@ public class ExcelExporter
         var ws = package.Workbook.Worksheets.Add("CompletedTasksPerWeek");
 
         // Header
-        ws.Cells["A1"].Value = "Week";
-        ws.Cells["B1"].Value = "UserName";
-        ws.Cells["C1"].Value = "CompletedTasks";
+        ws.Cells["A1"].Value = "WeekNumber";
+        ws.Cells["B1"].Value = "Year";
+        ws.Cells["C1"].Value = "CompletedTasksCount";
 
         using (var range = ws.Cells["A1:C1"])
         {

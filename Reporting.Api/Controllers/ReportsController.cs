@@ -77,7 +77,7 @@ public class ReportsController : ControllerBase
     // Excel Export API � Tasks Per User
     [HttpGet("tasks-per-user/export")]
     public async Task<IActionResult> ExportTasksPerUser(
-        [FromQuery] TasksPerUserQuery query,
+        [FromQuery] TasksPerUserQueryDto query,
         [FromServices] ExcelExporter exporter)
     {
         var result = await _reportService.GetTasksPerUserAsync(query);
@@ -136,5 +136,4 @@ public class ReportsController : ControllerBase
     }
 
 
-}
 }

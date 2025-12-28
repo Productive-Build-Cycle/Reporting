@@ -23,13 +23,7 @@ builder.Services.AddDbContext<ReportingDbContext>(options =>
 });
 
 // Application Services
-builder.Services.AddScoped<
-    ITasksPerUserReportRepository,
-    TasksPerUserReportRepository>();
-
-builder.Services.AddScoped<IReportService, ReportService>();
-builder.Services.AddScoped<ExcelExporter>();
-
+builder.Services.AddApplicationServices();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
