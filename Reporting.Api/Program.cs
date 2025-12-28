@@ -19,12 +19,6 @@ builder.Services.AddDbContext<ReportingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
-// Application Services
-builder.Services.AddScoped<
-    ITasksPerUserReportRepository,
-    TasksPerUserReportRepository>();
-
-builder.Services.AddScoped<IReportService, ReportService>();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

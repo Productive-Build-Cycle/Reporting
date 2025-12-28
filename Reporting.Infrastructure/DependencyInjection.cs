@@ -9,11 +9,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IRepository, ReportRepository>();
+        //Repositories
+        services.AddScoped<IReportRepository,ReportRepository>();
+
+        //Services
         services.AddScoped<IReportService, ReportService>();
-        
-        services.AddScoped<IPerformanceRepository, PerformanceReportRepository>();
-        services.AddScoped<IPerformanceReportService, PerformanceReportService>();
 
         return services;
     }
