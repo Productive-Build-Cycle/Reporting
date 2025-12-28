@@ -6,7 +6,6 @@ public class ExcelExporter
 {
     public byte[] ExportTasksPerUser(List<TasksPerUserReportDto> data)
     {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
         using var package = new ExcelPackage();
         var ws = package.Workbook.Worksheets.Add("TasksPerUser");

@@ -3,8 +3,11 @@ using Reporting.Infrastructure.Db;
 using Reporting.Application.Interfaces;
 using Reporting.Application.Services;
 using Reporting.Infrastructure.Repositories;
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
+
+ExcelPackage.License.SetNonCommercialPersonal("Reporting");
 
 // Controllers
 builder.Services.AddControllers();
