@@ -57,9 +57,9 @@ public class ExcelExporter
         // Data
         for (int i = 0; i < data.Count; i++)
         {
-            ws.Cells[i + 2, 1].Value = data[i].Week;
-            ws.Cells[i + 2, 2].Value = data[i].UserName;
-            ws.Cells[i + 2, 3].Value = data[i].CompletedTasks;
+            ws.Cells[i + 2, 1].Value = data[i].WeekNumber;
+            ws.Cells[i + 2, 2].Value = data[i].Year;
+            ws.Cells[i + 2, 3].Value = data[i].CompletedTasksCount;
         }
 
         ws.Cells.AutoFitColumns();
