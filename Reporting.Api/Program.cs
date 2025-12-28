@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Reporting.Infrastructure;
 using Reporting.Infrastructure.Db;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
+
+// Application Services
+builder.Services.AddApplicationServices();
 
 // DbContext
 builder.Services.AddDbContext<ReportingDbContext>(options =>
