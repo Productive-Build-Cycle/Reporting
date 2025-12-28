@@ -1,4 +1,5 @@
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Reporting.Application.DTOs;
 
 public class ExcelExporter
@@ -10,12 +11,19 @@ public class ExcelExporter
         using var package = new ExcelPackage();
         var ws = package.Workbook.Worksheets.Add("TasksPerUser");
 
-        //Header
-        ws.Cells[1, 1].Value = "UserId";
-        ws.Cells[1, 2].Value = "UserName";
-        ws.Cells[1, 3].Value = "TasksCount";
+        // Header row
+        ws.Cells["A1"].Value = "UserId";
+        ws.Cells["B1"].Value = "UserName";
+        ws.Cells["C1"].Value = "TasksCount";
 
-        //Data
+        using (var range = ws.Cells["A1:C1"])
+        {
+            range.Style.Font.Bold = true;
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+        }
+
+        // Data rows
         for (int i = 0; i < data.Count; i++)
         {
             ws.Cells[i + 2, 1].Value = data[i].UserId;
