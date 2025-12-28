@@ -1,19 +1,20 @@
 using Reporting.Application.DTOs;
 using Reporting.Application.Interfaces;
+using System.Threading.Tasks;
 
 namespace Reporting.Application.Services;
 
 public class ReportService : IReportService
 {
-    private readonly ITasksPerUserReportRepository _repository;
+    private readonly IReportRepository _repository;
 
-    public ReportService(ITasksPerUserReportRepository repository)
+    public ReportService(IReportRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<List<TasksPerUserReportDto>> GetTasksPerUserAsync(
-        TasksPerUserQuery query)
+        TasksPerUserQueryDto query)
     {
         if (query.From.HasValue && query.To.HasValue &&
             query.From > query.To)
@@ -26,6 +27,21 @@ public class ReportService : IReportService
                 query.Status, query.From, query.To)
             : await _repository.GetTasksPerUser_LinqAsync(
                 query.Status, query.From, query.To);
+    }
+
+    //Calls repository to get weekly completed tasks report
+    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
+            CompletedTasksPerWeekQueryDto query)
+    {
+        return await _repository
+            .GetCompletedTasksPerWeekAsync(query);
+    }
+
+    public async Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
+        TeamPerformanceSummaryRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        return await _repository.GetTeamPerformanceSummaryAsync(request, cancellationToken);
     }
 }
 

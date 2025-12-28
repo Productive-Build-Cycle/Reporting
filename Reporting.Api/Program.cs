@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Reporting.Infrastructure;
 using Reporting.Infrastructure.Db;
 using Reporting.Application.Interfaces;
 using Reporting.Application.Services;
@@ -11,6 +12,9 @@ ExcelPackage.License.SetNonCommercialPersonal("Reporting");
 
 // Controllers
 builder.Services.AddControllers();
+
+// Application Services
+builder.Services.AddApplicationServices();
 
 // DbContext
 builder.Services.AddDbContext<ReportingDbContext>(options =>

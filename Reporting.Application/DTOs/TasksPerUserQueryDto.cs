@@ -1,6 +1,6 @@
 ﻿namespace Reporting.Application.DTOs;
 
-public record TasksPerUserQuery(
+public record TasksPerUserQueryDto(
     string? Status,
     DateTime? From,
     DateTime? To,
