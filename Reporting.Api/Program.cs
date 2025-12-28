@@ -21,6 +21,9 @@ builder.Services.AddScoped<
     TasksPerUserReportRepository>();
 
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<ExcelExporter>();
+
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
