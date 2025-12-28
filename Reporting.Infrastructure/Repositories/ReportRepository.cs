@@ -86,4 +86,39 @@ public sealed class TasksPerUserReportRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(CompletedTasksPerWeekQuery query)
+    {
+        var sql = @"
+            SELECT
+                DATEPART(YEAR, CompletedAt)      AS [Year],
+                DATEPART(WEEK, CompletedAt)      AS [WeekNumber],
+                COUNT(*)                         AS [CompletedTasksCount]
+            FROM Tasks
+            WHERE
+                CompletedAt IS NOT NULL
+                AND CompletedAt >= @StartDate
+                AND CompletedAt <= @EndDate
+            GROUP BY
+                DATEPART(YEAR, CompletedAt),
+                DATEPART(WEEK, CompletedAt)
+            ORDER BY
+                [Year],
+                [WeekNumber];
+
+            ";
+
+        var parameters = new[]
+        {
+    new SqlParameter("@StartDate", query.StartDate),
+    new SqlParameter("@EndDate", query.EndDate)
+};
+
+        return await _context
+            .Set<CompletedTasksPerWeekReportDto>()
+            .FromSqlRaw(sql, parameters)
+            .AsNoTracking()
+            .ToListAsync();
+
+    }
 }

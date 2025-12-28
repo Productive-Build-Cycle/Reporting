@@ -13,4 +13,7 @@ public interface ITasksPerUserReportRepository
         string? status = null,
         DateTime? from = null,
         DateTime? to = null);
+
+    Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
+           CompletedTasksPerWeekQuery query);
 }

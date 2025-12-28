@@ -82,5 +82,7 @@ public sealed class ReportingDbContext : DbContext
             eb.ToView(null); // no db object
         });
 
+        // It doesn't represent a real table and has no primary key
+        modelBuilder.Entity<CompletedTasksPerWeekReportDto>().HasNoKey();
     }
 }
