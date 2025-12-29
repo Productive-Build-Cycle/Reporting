@@ -17,6 +17,11 @@ public interface IReportRepository
     Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
            CompletedTasksPerWeekQueryDto query);
 
+    // Gets weekly completed tasks from the GetCompletedTasksPerWeek stored procedure.
+    Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekSpAsync(
+        DateTime startDate,
+        DateTime endDate);
+
     Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
         TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default);           
