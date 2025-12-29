@@ -14,6 +14,13 @@ public interface IReportRepository
         DateTime? from = null,
         DateTime? to = null);
 
+    Task<List<TasksPerUserReportDto>> GetTasksPerUser_SpAsync(
+    string? status = null,
+    DateTime? from = null,
+    DateTime? to = null,
+    int? teamId = null);
+
+
     Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
            CompletedTasksPerWeekQueryDto query);
 
