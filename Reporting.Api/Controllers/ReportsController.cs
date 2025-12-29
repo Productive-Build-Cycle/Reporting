@@ -53,6 +53,18 @@ public class ReportsController : ControllerBase
     }
 
     /// <summary>
+    /// Returns weekly completed tasks for a date range using the GetCompletedTasksPerWeek stored procedure.
+    /// </summary>
+    [HttpGet("completed-tasks/weekly")]
+    public async Task<IActionResult> GetCompletedTasksPerWeekSP([FromQuery] CompletedTasksPerWeekQueryDto query)
+    {
+        var result = await _reportService
+            .GetCompletedTasksPerWeekAsync(query);
+
+        return Ok(result);
+    }
+
+    /// <summary>
     /// Get Team Performance Summary Report
     /// گزارش خلاصه عملکرد تیم‌ها
     /// </summary>
