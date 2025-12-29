@@ -87,6 +87,26 @@ public sealed class ReportRepository
             .ToListAsync();
     }
 
+    public async Task<List<TasksPerUserReportDto>> GetTasksPerUser_SpAsync(
+    string? status = null,
+    DateTime? from = null,
+    DateTime? to = null,
+    int? teamId = null)
+    {
+        return await _context
+            .Set<TasksPerUserReportDto>()
+            .FromSqlRaw(
+                "EXEC usp_GetTasksPerUser @Status, @FromDate, @ToDate, @TeamId",
+                new SqlParameter("@Status", (object?)status ?? DBNull.Value),
+                new SqlParameter("@FromDate", (object?)from ?? DBNull.Value),
+                new SqlParameter("@ToDate", (object?)to ?? DBNull.Value),
+                new SqlParameter("@TeamId", (object?)teamId ?? DBNull.Value)
+            )
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+
     public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
         CompletedTasksPerWeekQueryDto query)
     {
