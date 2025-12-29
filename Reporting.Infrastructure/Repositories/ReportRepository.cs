@@ -123,6 +123,20 @@ public sealed class ReportRepository
 
     }
 
+    // Gets weekly completed tasks from the GetCompletedTasksPerWeek stored procedure.
+    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekSpAsync(DateTime startDate, DateTime endDate)
+    {
+        return await _context
+        .Set<CompletedTasksPerWeekReportDto>()
+        .FromSqlRaw(
+            "EXEC GetCompletedTasksPerWeek @StartDate, @EndDate",
+            new SqlParameter("@StartDate", startDate),
+            new SqlParameter("@EndDate", endDate)
+        )
+        .AsNoTracking()
+        .ToListAsync();
+    }
+
     public async Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
         TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default)
