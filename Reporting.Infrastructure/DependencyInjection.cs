@@ -14,7 +14,7 @@ public static class DependencyInjection
 
         //Services
         services.AddScoped<IReportService, ReportService>();
-
+        services.AddScoped<ExcelExporter>();
         return services;
     }
 }

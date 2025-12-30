@@ -73,4 +73,67 @@ public class ReportsController : ControllerBase
         var result = await _reportService.GetTeamPerformanceSummaryAsync(request, cancellationToken);
         return Ok(result);
     }
+
+    // Excel Export API � Tasks Per User
+    [HttpGet("tasks-per-user/export")]
+    public async Task<IActionResult> ExportTasksPerUser(
+        [FromQuery] TasksPerUserQueryDto query,
+        [FromServices] ExcelExporter exporter)
+    {
+        var result = await _reportService.GetTasksPerUserAsync(query);
+
+        if (result.Count == 0)
+            return NoContent();
+
+        var file = exporter.ExportTasksPerUser(result);
+
+        return File(
+            file,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "tasks-per-user.xlsx"
+        );
+    }
+
+    // Excel Export API � Completed Tasks Per Week
+    [HttpGet("completed-tasks-per-week/export")]
+    public async Task<IActionResult> ExportCompletedTasksPerWeek(
+        [FromQuery] CompletedTasksPerWeekQueryDto query,
+        [FromServices] ExcelExporter exporter)
+    {
+        var result = await _reportService.GetCompletedTasksPerWeekAsync(query);
+
+        if (result.Count == 0)
+            return NoContent();
+
+        var file = exporter.ExportCompletedTasksPerWeek(result);
+
+        return File(
+            file,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "completed-tasks-per-week.xlsx"
+        );
+    }
+
+    // Excel Export API � Team Performance Summary
+    [HttpGet("team-performance-summary/export")]
+    public async Task<IActionResult> ExportTeamPerformanceSummary(
+        [FromQuery] TeamPerformanceSummaryRequestDto query,
+        [FromServices] ExcelExporter exporter,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _reportService.GetTeamPerformanceSummaryAsync(query, cancellationToken);
+
+        if (result.Count == 0)
+            return NoContent();
+
+        var file = exporter.ExportTeamPerformanceSummary(result);
+
+        return File(
+            file,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "team-performance-summary.xlsx"
+        );
+    }
+
+
 }
