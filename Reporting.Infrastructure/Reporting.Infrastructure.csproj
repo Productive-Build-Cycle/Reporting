@@ -14,6 +14,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Exclude nested Reporting.Benchmarks folder to avoid duplicate assembly attributes -->
+    <Compile Remove="Reporting.Benchmarks\**\*.cs" />
+    <None Remove="Reporting.Benchmarks\**\*" />
+    <Content Remove="Reporting.Benchmarks\**\*" />
+    <EmbeddedResource Remove="Reporting.Benchmarks\**\*" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
