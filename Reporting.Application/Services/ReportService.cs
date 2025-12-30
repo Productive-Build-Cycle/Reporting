@@ -22,12 +22,19 @@ public class ReportService : IReportService
             throw new ArgumentException("From date cannot be greater than To date");
         }
 
+        if (query.UseSp)
+        {
+            return await _repository.GetTasksPerUser_SpAsync(
+                query.Status, query.From, query.To, query.TeamId);
+        }
+
         return query.UseRawSql
             ? await _repository.GetTasksPerUser_RawSqlAsync(
                 query.Status, query.From, query.To)
             : await _repository.GetTasksPerUser_LinqAsync(
                 query.Status, query.From, query.To);
     }
+
 
     //Calls repository to get weekly completed tasks report
     public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
