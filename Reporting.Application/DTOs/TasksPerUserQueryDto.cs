@@ -14,4 +14,5 @@ public class TasksPerUserQueryDto
     public int? TeamId { get; set; }
     public bool UseSp { get; set; } = false;
     public bool UseRawSql { get; set; } = false;
+    public bool UseDapper { get; set; } = false; // <- new
 }
