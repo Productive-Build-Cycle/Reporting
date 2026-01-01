@@ -5,7 +5,8 @@ namespace Reporting.Application.Interfaces;
 public interface IReportService
 {
     Task<List<TasksPerUserReportDto>> GetTasksPerUserAsync(
-        TasksPerUserQueryDto query);
+        TasksPerUserQueryDto query,
+        CancellationToken cancellationToken = default);
 
     //Calls repository to get weekly completed tasks report
     Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
