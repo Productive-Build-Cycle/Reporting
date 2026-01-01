@@ -5,9 +5,7 @@ namespace Reporting.Application.Interfaces;
 public interface IReportRepository
 {
     Task<List<TasksPerUserReportDto>> GetTasksPerUser_DapperAsync(
-    string? status = null,
-    DateTime? from = null,
-    DateTime? to = null);
+    CompletedTasksPerWeekQueryDto query);
 
 
     Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
