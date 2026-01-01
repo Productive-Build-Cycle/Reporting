@@ -27,9 +27,9 @@ public class ReportsController : ControllerBase
     /// <response code="204">No tasks found for the given filters</response>
     [HttpGet("tasks-per-user")]
     [ProducesResponseType(typeof(List<TasksPerUserReportDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> GetTasksPerUser(
-        [FromQuery] TasksPerUserQueryDto query)
+        [FromQuery] TasksPerUserQueryDto query,
+        CancellationToken cancellationToken = default)
     {
         var result = await _reportService.GetTasksPerUserAsync(query);
         if (result.Count == 0)
