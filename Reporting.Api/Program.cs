@@ -44,13 +44,34 @@ using (var scope = app.Services.CreateScope())
     // Apply pending migrations
     db.Database.Migrate();
     
+    // Create stored procedures (required for benchmarking)
+    try
+    {
+        Reporting.Infrastructure.Scripts.CreateStoredProcedures.CreateAll(db);
+    }
+    catch (Exception ex)
+    {
+        // Log but don't fail startup if stored procedures can't be created
+        // They can be created manually if needed
+        Console.WriteLine($"Warning: Could not create stored procedures automatically: {ex.Message}");
+        Console.WriteLine("You can create them manually by running the SQL scripts in Reporting.Infrastructure/Scripts/");
+    }
+    
     // Seed initial data (teams, users, projects, tasks)
     SeedData.Initialize(db);
     
-    // Optional: Seed heavy data for performance benchmarking
-    // Uncomment the line below to add 50,000+ tasks for realistic performance testing
-    // Note: This will take several minutes to complete
-    // Reporting.Infrastructure.Scripts.SeedHeavyData.Seed(db, targetTaskCount: 50_000);
+    // Seed heavy data for performance benchmarking
+    // This creates 50,000+ tasks for realistic performance testing
+    // Note: This will take several minutes to complete on first run
+    try
+    {
+        Reporting.Infrastructure.Scripts.SeedHeavyData.Seed(db, targetTaskCount: 50_000);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Warning: Could not seed heavy data: {ex.Message}");
+        Console.WriteLine("Basic seed data is still available. Heavy data can be seeded manually if needed.");
+    }
 }
 
 app.Run();
