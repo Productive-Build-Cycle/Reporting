@@ -49,10 +49,10 @@ public sealed class EfCompletedTasksPerWeekQuery : ICompletedTasksPerWeekQuery
                 [Year],
                 [WeekNumber]";
 
-        var result = await _context
-            .Set<CompletedTasksPerWeekReportDto>()
-            .FromSqlRaw(sql, startDate, endDate)
-            .AsNoTracking()
+        // Use Database.SqlQueryRaw for DTOs that aren't entities
+        // This is the correct way to execute raw SQL that returns non-entity types
+        var result = await _context.Database
+            .SqlQueryRaw<CompletedTasksPerWeekReportDto>(sql, startDate, endDate)
             .ToListAsync(cancellationToken);
 
         return result;
