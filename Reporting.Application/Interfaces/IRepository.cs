@@ -4,7 +4,7 @@ namespace Reporting.Application.Interfaces;
 
 public interface IReportRepository
 {
-    Task<List<TasksPerUserReportDto>> GetTasksPerUserDapperAsync(
+    Task<List<TasksPerUserReportDto>> GetTasksPerUserEfAsync(
         TasksPerUserQueryDto query,
         CancellationToken cancellationToken);
    
