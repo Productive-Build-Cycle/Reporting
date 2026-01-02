@@ -65,7 +65,7 @@ using (var scope = app.Services.CreateScope())
     // Note: This will take several minutes to complete on first run
     try
     {
-        Reporting.Infrastructure.Scripts.SeedHeavyData.Seed(db, targetTaskCount: 50_000);
+        Reporting.Infrastructure.Db.SeedHeavyData.Seed(db, targetTaskCount: 50_000);
     }
     catch (Exception ex)
     {
