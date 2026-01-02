@@ -31,10 +31,18 @@ public class ReportsController : ControllerBase
         [FromQuery] TasksPerUserQueryDto query,
         CancellationToken cancellationToken = default)
     {
-        var result = await _reportService.GetTasksPerUserAsync(query);
-        if (result.Count == 0)
-            return NoContent();
-        return Ok(result);
+        try
+        {
+            var result = await _reportService.GetTasksPerUserAsync(query);
+            if (result.Count == 0)
+                return NoContent();
+            return Ok(result);
+
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred while retrieving tasks per user reports.", message = ex.Message });
+        }
     }
 
     /// <summary>
