@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting.Domain", "Reporting.Domain\Reporting.Domain.csproj", "{43CBB55E-40D9-4241-AED3-8F7A5E0ED9BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting.Benchmarks", "Reporting.Infrastructure\Reporting.Benchmarks\Reporting.Benchmarks.csproj", "{090E2D52-FB46-F264-F82B-AEF990E47F7C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting.Benchmarks", "Reporting.Benchmarks\Reporting.Benchmarks.csproj", "{090E2D52-FB46-F264-F82B-AEF990E47F7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
