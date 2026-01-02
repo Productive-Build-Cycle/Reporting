@@ -1,9 +1,11 @@
 ﻿namespace Reporting.Application.DTOs;
 
-public record TasksPerUserQueryDto(
-    string? Status,
-    DateTime? From,
-    DateTime? To,
-    int PageNumber = 1,
-    int PageSize = 10
-);
+public class TasksPerUserQueryDto
+{
+    public string? Status { get; set; } 
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+}
+
