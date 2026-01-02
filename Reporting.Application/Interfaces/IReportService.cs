@@ -12,7 +12,7 @@ public interface IReportService
     Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
             CompletedTasksPerWeekQueryDto query);
 
-    Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
+    Task<PagedResultDto<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
         TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default);            
 }

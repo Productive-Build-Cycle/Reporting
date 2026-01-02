@@ -64,22 +64,29 @@ public class ReportsController : ControllerBase
     /// Get Team Performance Summary Report
     /// گزارش خلاصه عملکرد تیم‌ها
     /// </summary>
-    /// <param name="request">Filter parameters (StartDate, EndDate, TeamId)</param>
+    /// <param name="request">Filter parameters (StartDate, EndDate, TeamId, PageNumber, PageSize)</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>List of team performance summaries with metrics:
+    /// <returns>Paginated list of team performance summaries with metrics:
     /// - Total Tasks (تعداد کل تسک‌ها)
     /// - Completed Tasks (تعداد تسک‌های تکمیل‌شده)
     /// - Completion Rate (نرخ تکمیل)
     /// </returns>
-    /// <response code="200">Returns the list of team performance summaries</response>
+    /// <response code="200">Returns the paginated list of team performance summaries</response>
     [HttpGet("team-performance-summary")]
-    [ProducesResponseType(typeof(List<TeamPerformanceSummaryResponseDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<TeamPerformanceSummaryResponseDto>>> GetTeamPerformanceSummary(
+    [ProducesResponseType(typeof(PagedResultDto<TeamPerformanceSummaryResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<TeamPerformanceSummaryResponseDto>>> GetTeamPerformanceSummary(
         [FromQuery] TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default)
     {
-        var result = await _reportService.GetTeamPerformanceSummaryAsync(request, cancellationToken);
-        return Ok(result);
+        try
+        {
+            var result = await _reportService.GetTeamPerformanceSummaryAsync(request, cancellationToken);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred while retrieving team performance summary", message = ex.Message });
+        }
     }
 
     // Excel Export API � Tasks Per User
@@ -140,18 +147,29 @@ public class ReportsController : ControllerBase
         [FromServices] ExcelExporter exporter,
         CancellationToken cancellationToken = default)
     {
-        var result = await _reportService.GetTeamPerformanceSummaryAsync(query, cancellationToken);
+        try
+        {
+            // For export, get all data by setting a large page size
+            query.PageNumber = 1;
+            query.PageSize = int.MaxValue;
+            
+            var result = await _reportService.GetTeamPerformanceSummaryAsync(query, cancellationToken);
 
-        if (result.Count == 0)
-            return NoContent();
+            if (result.Items.Count == 0)
+                return NoContent();
 
-        var file = exporter.ExportTeamPerformanceSummary(result);
+            var file = exporter.ExportTeamPerformanceSummary(result.Items);
 
-        return File(
-            file,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "team-performance-summary.xlsx"
-        );
+            return File(
+                file,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "team-performance-summary.xlsx"
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred while exporting team performance summary", message = ex.Message });
+        }
     }
 
 

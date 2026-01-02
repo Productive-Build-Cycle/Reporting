@@ -1,4 +1,4 @@
-﻿namespace Reporting.Application.DTOs;
+namespace Reporting.Application.DTOs;
 
 public class PagedResultDto<T>
 {

@@ -30,7 +30,7 @@ public class ReportService : IReportService
             .GetCompletedTasksPerWeekAsync(query);
     }
 
-    public async Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
+    public async Task<PagedResultDto<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
         TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default)
     {

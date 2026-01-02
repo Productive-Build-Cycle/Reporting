@@ -97,11 +97,12 @@ public sealed class ReportRepository
 
     }
 
-    public async Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
+    public async Task<PagedResultDto<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
         TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default)
     {
-        var tasksQuery = _context.Tasks.AsQueryable();
+        // Build base query with filters
+        var tasksQuery = _context.Tasks.AsNoTracking().AsQueryable();
 
         // Apply date filters if provided
         if (request.StartDate.HasValue)
@@ -121,22 +122,41 @@ public sealed class ReportRepository
         }
 
         // Join with Teams and group by team to calculate metrics
-        var result = await (from task in tasksQuery
-                            join team in _context.Teams on task.TeamId equals team.Id
-                            group task by new { team.Id, team.Name } into g
-                            select new TeamPerformanceSummaryResponseDto
-                            {
-                                TeamId = g.Key.Id,
-                                TeamName = g.Key.Name,
-                                TotalTasks = g.Count(),
-                                CompletedTasks = g.Count(t => t.Status == "Completed" || t.CompletedAt != null),
-                                CompletionRate = g.Count() > 0
-                                    ? (decimal)g.Count(t => t.Status == "Completed" || t.CompletedAt != null) * 100 / g.Count()
-                                    : 0
-                            })
+        var groupedQuery = from task in tasksQuery
+                           join team in _context.Teams.AsNoTracking() on task.TeamId equals team.Id
+                           group task by new { team.Id, team.Name } into g
+                           select new TeamPerformanceSummaryResponseDto
+                           {
+                               TeamId = g.Key.Id,
+                               TeamName = g.Key.Name,
+                               TotalTasks = g.Count(),
+                               CompletedTasks = g.Count(t => t.Status == "Completed" || t.CompletedAt != null),
+                               CompletionRate = g.Count() > 0
+                                   ? (decimal)g.Count(t => t.Status == "Completed" || t.CompletedAt != null) * 100 / g.Count()
+                                   : 0
+                           };
+
+        // Get total count before pagination
+        var totalCount = await groupedQuery.CountAsync(cancellationToken);
+
+        // Apply pagination
+        var pageNumber = request.PageNumber > 0 ? request.PageNumber : 1;
+        var pageSize = request.PageSize > 0 ? request.PageSize : 10;
+
+        var items = await groupedQuery
+            .OrderByDescending(x => x.CompletionRate)
+            .ThenByDescending(x => x.TotalTasks)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        return result;
+        return new PagedResultDto<TeamPerformanceSummaryResponseDto>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
     }
 
 }

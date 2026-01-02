@@ -385,3 +385,6 @@ appsettings.*.json
 **/Migrations/
 *.Designer.cs
 
+
+# Benchmark Results
+BenchmarkDotNet.Artifacts/
