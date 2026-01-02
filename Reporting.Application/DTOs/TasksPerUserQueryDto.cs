@@ -3,5 +3,7 @@
 public record TasksPerUserQueryDto(
     string? Status,
     DateTime? From,
-    DateTime? To
+    DateTime? To,
+    int PageNumber = 1,
+    int PageSize = 10
 );
