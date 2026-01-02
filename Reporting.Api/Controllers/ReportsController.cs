@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Reporting.Application.DTOs;
 using Reporting.Application.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Reporting.Api.Controllers;
 
@@ -58,10 +59,21 @@ public class ReportsController : ControllerBase
     [HttpGet("completed-tasks/weekly")]
     public async Task<IActionResult> GetCompletedTasksPerWeekSP([FromQuery] CompletedTasksPerWeekQueryDto query)
     {
-        var result = await _reportService
+        try
+        {
+            var result = await _reportService
             .GetCompletedTasksPerWeekAsync(query);
 
-        return Ok(result);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                error = "An error occurred while retrieving team performance summary",
+                message = ex.Message
+            });
+        }
     }
 
     /// <summary>
