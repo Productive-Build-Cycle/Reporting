@@ -75,14 +75,5 @@ public sealed class ReportingDbContext : DbContext
         modelBuilder.Entity<TaskEntity>()
             .HasIndex(t => t.CompletedAt);
 
-        // Reporting DTO
-        modelBuilder.Entity<TasksPerUserReportDto>(eb =>
-        {
-            eb.HasNoKey();
-            eb.ToView(null); // no db object
-        });
-
-        // It doesn't represent a real table and has no primary key
-        modelBuilder.Entity<CompletedTasksPerWeekReportDto>().HasNoKey();
     }
 }
