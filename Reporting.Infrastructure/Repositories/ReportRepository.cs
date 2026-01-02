@@ -19,12 +19,11 @@ public sealed class ReportRepository
 
     // Tasks Per User By EfCoreLinq
     public async Task<List<TasksPerUserReportDto>> GetTasksPerUserEfAsync(
-        TasksPerUserQueryDto query,
-        CancellationToken cancellationToken)
+    TasksPerUserQueryDto query,
+    CancellationToken cancellationToken)
     {
         var tasks = _context.Tasks
             .AsNoTracking()
-            .Include(t => t.User)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.Status))
@@ -42,15 +41,20 @@ public sealed class ReportRepository
             tasks = tasks.Where(t => t.CreatedAt <= query.To.Value);
         }
 
+        var pageNumber = query.PageNumber > 0 ? query.PageNumber : 1;
+        var pageSize = query.PageSize > 0 ? query.PageSize : 10;
+
         var result = await tasks
-            .GroupBy(t => new { t.User.Id, t.User.Name })
+            .GroupBy(t => new { t.UserId, t.User.Name })
             .Select(g => new TasksPerUserReportDto
             {
-                UserId = g.Key.Id,
+                UserId = g.Key.UserId,
                 UserName = g.Key.Name,
                 TasksCount = g.Count()
             })
             .OrderByDescending(r => r.TasksCount)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync(cancellationToken);
 
         return result;
