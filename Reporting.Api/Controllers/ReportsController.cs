@@ -33,7 +33,7 @@ public class ReportsController : ControllerBase
     {
         try
         {
-            var result = await _reportService.GetTasksPerUserAsync(query);
+            var result = await _reportService.GetTasksPerUserAsync(query, cancellationToken);
             if (result.Count == 0)
                 return NoContent();
             return Ok(result);
