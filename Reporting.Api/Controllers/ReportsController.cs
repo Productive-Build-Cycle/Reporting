@@ -70,8 +70,15 @@ public class ReportsController : ControllerBase
         [FromQuery] TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default)
     {
-        var result = await _reportService.GetTeamPerformanceSummaryAsync(request, cancellationToken);
-        return Ok(result);
+        try
+        {
+            var result = await _reportService.GetTeamPerformanceSummaryAsync(request, cancellationToken);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred while retrieving team performance summary", message = ex.Message });
+        }
     }
 
     // Excel Export API � Tasks Per User
@@ -121,22 +128,29 @@ public class ReportsController : ControllerBase
         [FromServices] ExcelExporter exporter,
         CancellationToken cancellationToken = default)
     {
-        // For export, get all data by setting a large page size
-        query.PageNumber = 1;
-        query.PageSize = int.MaxValue;
-        
-        var result = await _reportService.GetTeamPerformanceSummaryAsync(query, cancellationToken);
+        try
+        {
+            // For export, get all data by setting a large page size
+            query.PageNumber = 1;
+            query.PageSize = int.MaxValue;
+            
+            var result = await _reportService.GetTeamPerformanceSummaryAsync(query, cancellationToken);
 
-        if (result.Items.Count == 0)
-            return NoContent();
+            if (result.Items.Count == 0)
+                return NoContent();
 
-        var file = exporter.ExportTeamPerformanceSummary(result.Items);
+            var file = exporter.ExportTeamPerformanceSummary(result.Items);
 
-        return File(
-            file,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "team-performance-summary.xlsx"
-        );
+            return File(
+                file,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "team-performance-summary.xlsx"
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred while exporting team performance summary", message = ex.Message });
+        }
     }
 
 
