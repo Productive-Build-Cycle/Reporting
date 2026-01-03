@@ -24,8 +24,8 @@
 
 | Version | Date | Author | Description |
 |---------|------|--------|-------------|
-| 1.1.0 | January 2025 | Development Team | Updated: Added pagination support, stored procedures, error handling improvements |
-| 1.0.0 | January 2025 | Development Team | Initial documentation release |
+| 1.1.0 | January 2026 | Development Team | Updated: Added pagination support, stored procedures, error handling improvements |
+| 1.0.0 | December 2025 | Development Team | Initial documentation release |
 
 ---
 
@@ -810,9 +810,9 @@ Performance benchmarks were conducted using BenchmarkDotNet to compare different
 
 ### Contributor Profiles
 
-- [Soheil Sadeghii](https://github.com/SoheilSadeghii) - Team Leader
+- [Mina Golzari Dalir](https://github.com/MinaGolzari) - Team Leader
 - [Hosna Hajimohammadi (Lodgoer)](https://github.com/Lodgoer) - Developer
-- [Mina Golzari Dalir](https://github.com/MinaGolzari) - Developer
+- [Soheil Sadeghii](https://github.com/SoheilSadeghii) - Developer
 
 ### External Resources
 
