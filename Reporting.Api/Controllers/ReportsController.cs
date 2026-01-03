@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Reporting.Application.DTOs;
 using Reporting.Application.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Reporting.Api.Controllers;
 
@@ -46,18 +47,36 @@ public class ReportsController : ControllerBase
     }
 
     /// <summary>
-    /// Returns a weekly report of completed tasks.
-    /// گزارش هفتگی تسک‌های تکمیل‌شده
+    /// Returns a weekly report of completed tasks based on the specified filters.
     /// </summary>
-    /// <param name="query">Filter parameters such as date range, team, or user filters</param>
-    /// <returns>A weekly breakdown of completed tasks</returns>
+    /// <param name="query">
+    /// Filter parameters including date range, team/user filters,
+    /// and pagination settings such as PageNumber and PageSize.
+    /// </param>
+    /// <returns>
+    /// A paginated weekly breakdown of completed tasks.
+    /// </returns>
     /// <response code="200">Returns the weekly completed tasks report</response>
+    /// <response code="500">Returned when an unexpected error occurs</response>
+
     [HttpGet("completed-tasks-per-week")]
-    [ProducesResponseType(typeof(List<CompletedTasksPerWeekReportDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCompletedTasksPerWeek([FromQuery] CompletedTasksPerWeekQueryDto query)
     {
-        var result = await _reportService.GetCompletedTasksPerWeekAsync(query);
-        return Ok(result);
+        try
+        {
+            var result = await _reportService
+            .GetCompletedTasksPerWeekAsync(query);
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                error = "An error occurred while retrieving team performance summary",
+                message = ex.Message
+            });
+        }
     }
 
     /// <summary>

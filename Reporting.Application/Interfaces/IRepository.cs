@@ -4,12 +4,15 @@ namespace Reporting.Application.Interfaces;
 
 public interface IReportRepository
 {
+
+  // Gets weekly completed tasks from the GetCompletedTasksPerWeek stored procedure.
     Task<List<TasksPerUserReportDto>> GetTasksPerUserEfAsync(
         TasksPerUserQueryDto query,
         CancellationToken cancellationToken = default);
    
     Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
-           CompletedTasksPerWeekQueryDto query);
+        DateTime startDate,
+        DateTime endDate);
 
     Task<PagedResultDto<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
         TeamPerformanceSummaryRequestDto request,
