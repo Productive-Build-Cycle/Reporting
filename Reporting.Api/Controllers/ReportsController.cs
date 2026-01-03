@@ -31,10 +31,18 @@ public class ReportsController : ControllerBase
         [FromQuery] TasksPerUserQueryDto query,
         CancellationToken cancellationToken = default)
     {
-        var result = await _reportService.GetTasksPerUserAsync(query);
-        if (result.Count == 0)
-            return NoContent();
-        return Ok(result);
+        try
+        {
+            var result = await _reportService.GetTasksPerUserAsync(query, cancellationToken);
+            if (result.Count == 0)
+                return NoContent();
+            return Ok(result);
+
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred while retrieving tasks per user reports.", message = ex.Message });
+        }
     }
 
     /// <summary>
@@ -85,20 +93,31 @@ public class ReportsController : ControllerBase
     [HttpGet("tasks-per-user/export")]
     public async Task<IActionResult> ExportTasksPerUser(
         [FromQuery] TasksPerUserQueryDto query,
-        [FromServices] ExcelExporter exporter)
+        [FromServices] ExcelExporter exporter,
+        CancellationToken cancellationToken = default)
     {
-        var result = await _reportService.GetTasksPerUserAsync(query);
+        try
+        {
+            query.PageNumber = 1;
+            query.PageSize = int.MaxValue;
 
-        if (result.Count == 0)
-            return NoContent();
+            var result = await _reportService.GetTasksPerUserAsync(query);
 
-        var file = exporter.ExportTasksPerUser(result);
+            if (result.Count == 0)
+                return NoContent();
 
-        return File(
-            file,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "tasks-per-user.xlsx"
-        );
+            var file = exporter.ExportTasksPerUser(result);
+
+            return File(
+                file,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "tasks-per-user.xlsx"
+            );
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred while exporting tasks per user report.", message = ex.Message });
+        }
     }
 
     // Excel Export API � Completed Tasks Per Week

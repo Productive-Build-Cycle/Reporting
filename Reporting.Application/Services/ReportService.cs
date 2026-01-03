@@ -17,7 +17,7 @@ public class ReportService : IReportService
             TasksPerUserQueryDto query,
             CancellationToken cancellationToken = default)
     {
-        return await _repository.GetTasksPerUserDapperAsync(query, cancellationToken);
+        return await _repository.GetTasksPerUserEfAsync(query, cancellationToken);
     }
 
 

@@ -1,12 +1,9 @@
-using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml.Export.HtmlExport.StyleCollectors.StyleContracts;
 using Reporting.Application.DTOs;
 using Reporting.Application.Interfaces;
 using Reporting.Infrastructure.Db;
 using System.Data;
-using System.Runtime.InteropServices;
 
 namespace Reporting.Infrastructure.Repositories;
 
@@ -20,55 +17,47 @@ public sealed class ReportRepository
         _context = context;
     }
 
-    // Tasks Per User By DAPPER
-    public async Task<List<TasksPerUserReportDto>> GetTasksPerUserDapperAsync(
+    // Tasks Per User By EfCoreLinq
+    public async Task<List<TasksPerUserReportDto>> GetTasksPerUserEfAsync(
     TasksPerUserQueryDto query,
     CancellationToken cancellationToken)
     {
-        const string baseSql = """
-            SELECT 
-                u.Id   AS UserId,
-                u.Name AS UserName,
-                COUNT(t.Id) AS TasksCount
-            FROM Tasks t
-            JOIN Users u ON t.UserId = u.Id
-            WHERE 1 = 1
-            """;
-
-        var filters = new List<string>();
-        var parameters = new DynamicParameters();
+        var tasks = _context.Tasks
+            .AsNoTracking()
+            .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.Status))
         {
-            filters.Add("AND t.Status = @Status");
-            parameters.Add("Status", query.Status);
+            tasks = tasks.Where(t => t.Status == query.Status);
         }
 
         if (query.From.HasValue)
         {
-            filters.Add("AND t.CreatedAt >= @From");
-            parameters.Add("From", query.From.Value);
+            tasks = tasks.Where(t => t.CreatedAt >= query.From.Value);
         }
 
         if (query.To.HasValue)
         {
-            filters.Add("AND t.CreatedAt <= @To");
-            parameters.Add("To", query.To.Value);
+            tasks = tasks.Where(t => t.CreatedAt <= query.To.Value);
         }
 
-        var sql = $@"
-        {baseSql}
-        {string.Join(" ", filters)}
-        GROUP BY u.Id, u.Name
-        ORDER BY TasksCount DESC";
+        var pageNumber = query.PageNumber > 0 ? query.PageNumber : 1;
+        var pageSize = query.PageSize > 0 ? query.PageSize : 10;
 
-        using var conn = new SqlConnection(_context.Database.GetConnectionString());
-        await conn.OpenAsync(cancellationToken);
+        var result = await tasks
+            .GroupBy(t => new { t.UserId, t.User.Name })
+            .Select(g => new TasksPerUserReportDto
+            {
+                UserId = g.Key.UserId,
+                UserName = g.Key.Name,
+                TasksCount = g.Count()
+            })
+            .OrderByDescending(r => r.TasksCount)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
 
-        var result = await conn.QueryAsync<TasksPerUserReportDto>(
-            new CommandDefinition(sql, parameters, cancellationToken: cancellationToken));
-
-        return result.ToList();
+        return result;
     }
 
 
