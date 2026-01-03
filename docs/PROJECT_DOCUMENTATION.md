@@ -98,7 +98,7 @@ Developers, architects, project managers, and technical stakeholders.
 - Excel export functionality for all reports
 - RESTful API endpoints
 - Database persistence using SQL Server
-- Pagination support for large datasets
+- Pagination is applied at application layer after data retrieval
 
 **Out-of-Scope:**
 - User authentication and authorization (currently not implemented)
