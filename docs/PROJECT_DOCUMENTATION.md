@@ -811,7 +811,7 @@ Performance benchmarks were conducted using BenchmarkDotNet to compare different
 ### Contributor Profiles
 
 - [Mina Golzari Dalir](https://github.com/MinaGolzari) - Team Leader
-- [Hosna Hajimohammadi (Lodgoer)](https://github.com/Lodgoer) - Developer
+- [Hosna Hajimohammadi](https://github.com/Lodgoer) - Developer
 - [Soheil Sadeghii](https://github.com/SoheilSadeghii) - Developer
 
 ### External Resources
