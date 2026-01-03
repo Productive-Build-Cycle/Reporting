@@ -39,8 +39,18 @@ public class ReportsController : ControllerBase
     }
 
     /// <summary>
-    /// Returns weekly completed tasks for a date range using the GetCompletedTasksPerWeek stored procedure.
+    /// Returns a weekly report of completed tasks based on the specified filters.
     /// </summary>
+    /// <param name="query">
+    /// Filter parameters including date range, team/user filters,
+    /// and pagination settings such as PageNumber and PageSize.
+    /// </param>
+    /// <returns>
+    /// A paginated weekly breakdown of completed tasks.
+    /// </returns>
+    /// <response code="200">Returns the weekly completed tasks report</response>
+    /// <response code="500">Returned when an unexpected error occurs</response>
+
     [HttpGet("completed-tasks-per-week")]
     public async Task<IActionResult> GetCompletedTasksPerWeek([FromQuery] CompletedTasksPerWeekQueryDto query)
     {

@@ -30,12 +30,29 @@ public class ReportService : IReportService
     }
 
     // Provides weekly completed tasks report via stored procedure.
-    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(CompletedTasksPerWeekQueryDto query)
+    public async Task<PagedResultDto<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(CompletedTasksPerWeekQueryDto query)
     {
-        return await _repository
-            .GetCompletedTasksPerWeekAsync(
-                query.StartDate,
-                query.EndDate);
+        // 1. Get full data from repository (SP)
+        var data = await _repository.GetCompletedTasksPerWeekAsync(
+            query.StartDate,
+            query.EndDate);
+
+        // 2. Pagination logic
+        var totalCount = data.Count;
+
+        var items = data
+            .Skip((query.PageNumber - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToList();
+
+        // 3. Wrap result
+        return new PagedResultDto<CompletedTasksPerWeekReportDto>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            PageNumber = query.PageNumber,
+            PageSize = query.PageSize
+        };
     }
 
     public async Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
