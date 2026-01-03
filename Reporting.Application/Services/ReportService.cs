@@ -29,19 +29,11 @@ public class ReportService : IReportService
                 query.Status, query.From, query.To);
     }
 
-    //Calls repository to get weekly completed tasks report
-    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
-            CompletedTasksPerWeekQueryDto query)
-    {
-        return await _repository
-            .GetCompletedTasksPerWeekAsync(query);
-    }
-
     // Provides weekly completed tasks report via stored procedure.
-    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekSpAsync(CompletedTasksPerWeekQueryDto query)
+    public async Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(CompletedTasksPerWeekQueryDto query)
     {
         return await _repository
-            .GetCompletedTasksPerWeekSpAsync(
+            .GetCompletedTasksPerWeekAsync(
                 query.StartDate,
                 query.EndDate);
     }

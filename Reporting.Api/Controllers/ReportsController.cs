@@ -39,25 +39,10 @@ public class ReportsController : ControllerBase
     }
 
     /// <summary>
-    /// Returns a weekly report of completed tasks.
-    /// گزارش هفتگی تسک‌های تکمیل‌شده
-    /// </summary>
-    /// <param name="query">Filter parameters such as date range, team, or user filters</param>
-    /// <returns>A weekly breakdown of completed tasks</returns>
-    /// <response code="200">Returns the weekly completed tasks report</response>
-    [HttpGet("completed-tasks-per-week")]
-    [ProducesResponseType(typeof(List<CompletedTasksPerWeekReportDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCompletedTasksPerWeek([FromQuery] CompletedTasksPerWeekQueryDto query)
-    {
-        var result = await _reportService.GetCompletedTasksPerWeekAsync(query);
-        return Ok(result);
-    }
-
-    /// <summary>
     /// Returns weekly completed tasks for a date range using the GetCompletedTasksPerWeek stored procedure.
     /// </summary>
-    [HttpGet("completed-tasks/weekly")]
-    public async Task<IActionResult> GetCompletedTasksPerWeekSP([FromQuery] CompletedTasksPerWeekQueryDto query)
+    [HttpGet("completed-tasks-per-week")]
+    public async Task<IActionResult> GetCompletedTasksPerWeek([FromQuery] CompletedTasksPerWeekQueryDto query)
     {
         try
         {

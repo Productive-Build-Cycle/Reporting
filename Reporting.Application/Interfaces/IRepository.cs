@@ -14,11 +14,8 @@ public interface IReportRepository
         DateTime? from = null,
         DateTime? to = null);
 
-    Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
-           CompletedTasksPerWeekQueryDto query);
-
     // Gets weekly completed tasks from the GetCompletedTasksPerWeek stored procedure.
-    Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekSpAsync(
+    Task<List<CompletedTasksPerWeekReportDto>> GetCompletedTasksPerWeekAsync(
         DateTime startDate,
         DateTime endDate);
 
