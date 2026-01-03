@@ -147,10 +147,10 @@ public class ReportsController : ControllerBase
     {
         var result = await _reportService.GetCompletedTasksPerWeekAsync(query);
 
-        if (result.Count == 0)
+        if (result.Items.Count == 0)
             return NoContent();
 
-        var file = exporter.ExportCompletedTasksPerWeek(result);
+        var file = exporter.ExportCompletedTasksPerWeek(result.Items);
 
         return File(
             file,
