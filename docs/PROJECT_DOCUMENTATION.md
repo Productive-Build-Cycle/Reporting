@@ -14,7 +14,7 @@
 
 **Repository:** [https://github.com/Productive-Build-Cycle/Reporting.git](https://github.com/Productive-Build-Cycle/Reporting.git)
 
-**Date:** January 2025
+**Date:** January 2026
 
 ---
 
@@ -24,8 +24,8 @@
 
 | Version | Date | Author | Description |
 |---------|------|--------|-------------|
-| 1.1.0 | January 2025 | Development Team | Updated: Added pagination support, stored procedures, error handling improvements |
-| 1.0.0 | January 2025 | Development Team | Initial documentation release |
+| 1.1.0 | January 2026 | Development Team | Updated: Added pagination support, stored procedures, error handling improvements |
+| 1.0.0 | December 2025 | Development Team | Initial documentation release |
 
 ---
 
@@ -64,7 +64,7 @@ This project is developed and maintained by the **Productive Build Cycle** team.
 | Name | GitHub Profile | Role |
 |------|---------------|------|
 | Mina Golzari Dalir | [@MinaGolzari](https://github.com/MinaGolzari) | Team Leader / Project Lead |
-| Soheil Sadeghii | [@SoheilSadeghii](https://github.com/SoheilSadeghii) | Developer |
+| Soheil Sadeghi | [@SoheilSadeghii](https://github.com/SoheilSadeghii) | Developer |
 | Hosna Hajimohammadi | [@Lodgoer](https://github.com/Lodgoer) | Developer |
 
 ### Repository
@@ -810,9 +810,9 @@ Performance benchmarks were conducted using BenchmarkDotNet to compare different
 
 ### Contributor Profiles
 
-- [Soheil Sadeghii](https://github.com/SoheilSadeghii) - Team Leader
-- [Hosna Hajimohammadi (Lodgoer)](https://github.com/Lodgoer) - Developer
-- [Mina Golzari Dalir](https://github.com/MinaGolzari) - Developer
+- [Mina Golzari Dalir](https://github.com/MinaGolzari) - Team Leader
+- [Hosna Hajimohammadi](https://github.com/Lodgoer) - Developer
+- [Soheil Sadeghii](https://github.com/SoheilSadeghii) - Developer
 
 ### External Resources
 
