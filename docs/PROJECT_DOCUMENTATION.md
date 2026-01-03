@@ -64,7 +64,7 @@ This project is developed and maintained by the **Productive Build Cycle** team.
 | Name | GitHub Profile | Role |
 |------|---------------|------|
 | Mina Golzari Dalir | [@MinaGolzari](https://github.com/MinaGolzari) | Team Leader / Project Lead |
-| Soheil Sadeghii | [@SoheilSadeghii](https://github.com/SoheilSadeghii) | Developer |
+| Soheil Sadeghi | [@SoheilSadeghii](https://github.com/SoheilSadeghii) | Developer |
 | Hosna Hajimohammadi | [@Lodgoer](https://github.com/Lodgoer) | Developer |
 
 ### Repository
