@@ -14,19 +14,10 @@ public class ReportService : IReportService
     }
 
     public async Task<List<TasksPerUserReportDto>> GetTasksPerUserAsync(
-        TasksPerUserQueryDto query)
+            TasksPerUserQueryDto query,
+            CancellationToken cancellationToken = default)
     {
-        if (query.From.HasValue && query.To.HasValue &&
-            query.From > query.To)
-        {
-            throw new ArgumentException("From date cannot be greater than To date");
-        }
-
-        return query.UseRawSql
-            ? await _repository.GetTasksPerUser_RawSqlAsync(
-                query.Status, query.From, query.To)
-            : await _repository.GetTasksPerUser_LinqAsync(
-                query.Status, query.From, query.To);
+        return await _repository.GetTasksPerUserEfAsync(query, cancellationToken);
     }
 
     // Provides weekly completed tasks report via stored procedure.
@@ -55,7 +46,7 @@ public class ReportService : IReportService
         };
     }
 
-    public async Task<List<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
+    public async Task<PagedResultDto<TeamPerformanceSummaryResponseDto>> GetTeamPerformanceSummaryAsync(
         TeamPerformanceSummaryRequestDto request,
         CancellationToken cancellationToken = default)
     {
